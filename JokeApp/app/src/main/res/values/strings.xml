@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">JokeApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="title">Welcome to the Joke App!</string>
+    <string name="beginbutton">Begin</string>
+    <string name="title_activity_category">CategoryActivity</string>
+    <string name="Categoryscreen">Categories</string>
+    <string name="JokeScreen">The Joke:</string>
+</resources>
