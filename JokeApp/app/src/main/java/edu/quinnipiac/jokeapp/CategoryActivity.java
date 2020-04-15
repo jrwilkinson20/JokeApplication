@@ -37,21 +37,27 @@ public class CategoryActivity extends AppCompatActivity {
     }
     //This is what happens when each button is clicked.
     public void onClick(View view) {
-        if(view.getId() == R.id.programmingbutton){
-            Intent intent = new Intent(CategoryActivity.this,JokeActivity.class);
-            intent.putExtra("button","programming");
+        if (view.getId() == R.id.programmingbutton) {
+            Intent intent = new Intent(CategoryActivity.this, JokeActivity.class);
+            intent.putExtra("button", "programming");
+            startActivity(intent);
         } else if(view.getId() == R.id.darkbutton){
             Intent intent = new Intent(CategoryActivity.this,JokeActivity.class);
             intent.putExtra("button", "dark");
+            startActivity(intent);
         }else if(view.getId() == R.id.miscbutton){
             Intent intent = new Intent(CategoryActivity.this,JokeActivity.class);
             intent.putExtra("button", "miscellaneous");
+            startActivity(intent);
         }else if(view.getId() == R.id.anybutton){
             Intent intent = new Intent(CategoryActivity.this,JokeActivity.class);
             intent.putExtra("button", "any");
+            startActivity(intent);
         }else if(view.getId() == R.id.createbutton){
             Intent intent = new Intent(CategoryActivity.this,JokeActivity.class);
             intent.putExtra("button", "create");
+            startActivity(intent);
+
         }
     }
     @Override
