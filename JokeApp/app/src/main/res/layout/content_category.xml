@@ -9,6 +9,7 @@
     tools:context=".CategoryActivity"
     tools:showIn="@layout/activity_category">
     <TextView
+        android:id="@+id/categoryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
