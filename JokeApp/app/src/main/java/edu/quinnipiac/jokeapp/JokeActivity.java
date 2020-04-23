@@ -1,12 +1,22 @@
-package edu.quinnipiac.jokeapp;
+package edu.quinnipiac.ser210.jokeapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.MenuItemCompat;
 
+
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,6 +32,9 @@ import java.net.URL;
 
 public class JokeActivity extends AppCompatActivity {
     TextView view;
+    private ShareActionProvider provider;
+    public CoordinatorLayout layout;
+    public TextView text;
     private String url;
     String urlCategory;
 
@@ -30,6 +43,8 @@ public class JokeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joke);
         view = findViewById(R.id.viewText);
+        layout = findViewById(R.id.activity_joke);
+        text = (TextView) findViewById(R.id.jokeTextView);
         Intent intent = getIntent();
         urlCategory = intent.getStringExtra("button");
         url = "https://jokeapi.p.rapidapi.com/category/" + urlCategory;
@@ -39,14 +54,72 @@ public class JokeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Back?", Snackbar.LENGTH_LONG);
-                startActivity(new Intent(JokeActivity.this,MainActivity.class));
+                startActivity(new Intent(JokeActivity.this, CategoryActivity.class));
 
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getIntent();
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_settings:
+                Toast.makeText(this, "You can change my background and text color here!", Toast.LENGTH_SHORT);
+                return true;
+            case R.id.action_share:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, "This is a message for you");
+                provider.setShareIntent(intent);
+                return true;
+            case R.id.action_help:
+                AlertDialog.Builder help = new AlertDialog.Builder(this);
+                help.setTitle("How to Use");
+                help.setMessage("This app is used to display jokes for you! Click on any of the categories on the Categories screen in order for me to get a joke for you! If you want to make your own joke, click on the 'Create Your Own' Category!");
+                help.setCancelable(true);
+                help.show();
+                return true;
+            case R.id.blueBackground:
+                layout.setBackgroundColor(Color.parseColor("#2c2d7d"));
+                return true;
+            case R.id.blackBackground:
+                layout.setBackgroundColor(Color.parseColor("#000000"));
+                return true;
+            case R.id.greenBackground:
+                layout.setBackgroundColor(Color.parseColor("#4bb458"));
+                return true;
+            case R.id.redText:
+                text.setTextColor(Color.parseColor("#ed1215"));
+                return true;
+            case R.id.whiteText:
+                text.setTextColor(Color.parseColor("#ffffff"));
+                return true;
+            case R.id.purpleText:
+                text.setTextColor(Color.parseColor("#a279e4"));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
     private class FetchResults extends AsyncTask<String, Void, String> {
         ResultsHandler resultsHandler = new ResultsHandler();
-        // In the background, grab the url and the results of the selected game
         @Override
         protected String doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
@@ -84,7 +157,6 @@ public class JokeActivity extends AppCompatActivity {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        //Log.e(LOG_TAG, "Error" + e.getMessage());
                         return null;
                     }
                 }
@@ -96,13 +168,17 @@ public class JokeActivity extends AppCompatActivity {
         protected void onPostExecute (String result) {
 
             // If there are results, print them
+
             if (result != null) {
                 try {
                     String displayString = new ResultsHandler().getJokeInfo(result);
+                    Log.e("Result =", displayString);
                     view.setText(displayString);
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
+            } else {
+                Log.e("Error", "Result is null");
             }
         }
 
@@ -122,5 +198,10 @@ public class JokeActivity extends AppCompatActivity {
             }
             return buffer;
         }
+
+
+
     }
+
+
 }
