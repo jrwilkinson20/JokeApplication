@@ -11,12 +11,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".CreateYourOwn"></activity>
         <activity
-            android:name=".JokeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".JokeActivity" />
         <activity
             android:name=".CategoryActivity"
-            android:label="@string/title_activity_category"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_category" />
         <activity
             android:name=".OpeningActivity"
             android:label="@string/app_name"
