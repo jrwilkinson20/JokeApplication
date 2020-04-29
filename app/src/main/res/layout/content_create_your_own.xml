@@ -10,37 +10,44 @@
     tools:showIn="@layout/activity_create_your_own">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="1dp"
-        android:fontFamily="@font/bungee_inline"
-        android:text="Create your Own!"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="35sp" />
+        android:id="@+id/createTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:layout_centerHorizontal="true"
+    android:text="Create your Own Joke!"
+    android:fontFamily="@font/bungee"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="35sp"
+    />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/instructionsTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:fontFamily="@font/annie_use_your_telescope"
-        android:text="Type your joke out in the text box below!"
-        android:textColor="#8DAD8CF1"
-        android:textSize="24sp" />
+        android:fontFamily="@font/bungee"
+        android:text="Type your joke out in the text box below! Make sure you press the submit button once you're done!"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="200dp"
         android:ems="100"
         android:inputType="text"
         android:text="Type your joke here" />
 
-
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:ems="100"
+        android:inputType="text"
+        android:text="Type your punchline here" />
 
 
 </RelativeLayout>
