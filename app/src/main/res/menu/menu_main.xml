@@ -9,12 +9,28 @@
         android:title="@string/action_settings"
         app:showAsAction="never" >
     <menu>
-        <item android:id = "@+id/blue"
-            android:title = "Blue" />
-        <item android:id = "@+id/pink"
-            android:title = "Pink" />
-        <item android:id = "@+id/green"
-            android:title = "Green" />
+        <item android:id = "@+id/textColor"
+            android:title = "Text Color">
+        <menu>
+            <item android:id = "@+id/purpleText"
+                android:title = "Purple" />
+            <item android:id = "@+id/whiteText"
+                android:title = "White" />
+            <item android:id = "@+id/redText"
+                android:title = "Red" />
+        </menu>
+    </item>
+        <item android:id = "@+id/backgroundColor"
+            android:title = "Background Color">
+            <menu>
+            <item android:id = "@+id/blueBackground"
+                android:title = "Blue" />
+            <item android:id = "@+id/blackBackground"
+                android:title = "Black" />
+            <item android:id = "@+id/greenBackground"
+                android:title = "Green" />
+            </menu>
+        </item>
     </menu>
     </item>
 
@@ -23,7 +39,6 @@
         app:showAsAction="never"
         app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
         />
-
     <item android:id="@+id/action_help"
         android:title="Help"
         app:showAsAction="never" />
