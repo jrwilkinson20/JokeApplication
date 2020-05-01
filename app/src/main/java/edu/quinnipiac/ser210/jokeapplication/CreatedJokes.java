@@ -15,8 +15,12 @@ public class CreatedJokes {
     public void setJoke(String joke) {
         this.joke = joke;
     }
-
-    public String toString() {
+    public String getJoke() {
         return joke;
     }
+
+    public CreatedJokes(String joke) {
+        this.joke = joke;
+    }
+
 }
