@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 class JokeDatabaseHelper extends SQLiteOpenHelper {
 
@@ -20,6 +21,7 @@ class JokeDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.e("SendHelp", "Send Help");
         String createTable = "CREATE TABLE " + JOKE_TABLE + "(" + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " + JOKE_COL + " text not null);";
         db.execSQL(createTable);
     }
@@ -30,11 +32,14 @@ class JokeDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertJoke(String joke) {
+    public void insertJoke(CreatedJokes joke) {
+        Log.e("insertJoke", "Joke inserted");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues jokeValues = new ContentValues();
-        jokeValues.put(JOKE_COL, joke);
-        db.insert(DB_NAME, null, jokeValues);
+
+        jokeValues.put(JOKE_COL, joke.getJoke());
+        db.insert(JOKE_TABLE, null, jokeValues);
+        db.close();
     }
 
     private void updateDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -45,7 +50,7 @@ class JokeDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getJoke() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + DB_NAME;
+        String query = "SELECT * FROM " + JOKE_TABLE;
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
 
