@@ -27,12 +27,14 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 public class CreateYourOwn extends AppCompatActivity {
 
     TextView view;
     private Button submit;
     private Button viewJoke;
-    private EditText joke;
+    public EditText joke;
     private EditText punchline;
     private ShareActionProvider provider;
     public CoordinatorLayout layout;
@@ -53,9 +55,11 @@ public class CreateYourOwn extends AppCompatActivity {
         submit = (Button) findViewById(R.id.button2);
         viewJoke = (Button) findViewById(R.id.button3);
         joke = (EditText) findViewById(R.id.editText);
-        punchline = (EditText) findViewById(R.id.editText2);
-
+        CreatedJokes createdJokes = new CreatedJokes(joke.getText().toString());
         jokeDatabaseHelper = new JokeDatabaseHelper(this);
+        jokeDatabaseHelper.insertJoke(createdJokes);
+        //punchline = (EditText) findViewById(R.id.editText2);
+
         database = jokeDatabaseHelper.getWritableDatabase();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +67,8 @@ public class CreateYourOwn extends AppCompatActivity {
                 String Joke = joke.getText().toString();
                 addJoke(Joke);
                 joke.setText(Joke);
+
+
             }
         }
         );
@@ -71,7 +77,7 @@ public class CreateYourOwn extends AppCompatActivity {
                                       @Override
                                       public void onClick(View v) {
                                           Intent intent = new Intent(CreateYourOwn.this, JokeActivity.class);
-                                          //intent.putExtra(intent.EXTRA_TEXT, newJoke);
+                                          intent.putExtra("created", String.valueOf(joke));
                                           startActivity(intent);
                                       }
                                   }
@@ -102,7 +108,7 @@ public void close() {
 }
 
     public CreatedJokes addJoke(String newJoke) {
-       // Log.e(newJoke, "here is the joke");
+        Log.e(newJoke, "here is the joke");
         ContentValues jokes = new ContentValues();
         jokes.put(JokeDatabaseHelper.JOKE_COL, newJoke);
         long insertId = database.insert(JokeDatabaseHelper.JOKE_TABLE, null, jokes);
@@ -116,10 +122,15 @@ public void close() {
     }
 
     private CreatedJokes cursorToJoke(Cursor cursor) {
-        CreatedJokes createdJoke = new CreatedJokes();
+        Log.e("Cursor", "Use the cursor to find the joke");
+        CreatedJokes createdJoke = new CreatedJokes("Display");
         createdJoke.setId(cursor.getLong(0));
         createdJoke.setJoke(cursor.getString(1));
         return createdJoke;
+
+    }
+
+    public void insertJoke(View insertJoke) {
 
     }
 
@@ -183,4 +194,3 @@ public void close() {
     }
 
 }
-
