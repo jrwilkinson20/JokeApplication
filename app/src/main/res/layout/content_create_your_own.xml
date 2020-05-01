@@ -37,17 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:ems="100"
-        android:inputType="text"
-        android:text="Type your joke here" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:ems="100"
-        android:inputType="text"
-        android:text="Type your punchline here" />
+        android:hint="Type your joke here"
+        android:inputType="text" />
 
 
 </RelativeLayout>
