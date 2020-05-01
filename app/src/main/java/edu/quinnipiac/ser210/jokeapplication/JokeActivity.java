@@ -9,6 +9,7 @@ import androidx.core.view.MenuItemCompat;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
@@ -41,6 +42,7 @@ public class JokeActivity extends AppCompatActivity {
     public TextView text;
     private String url;
     String urlCategory;
+    String created;
     private CreateYourOwn dataSource;
 
     @Override
@@ -53,7 +55,16 @@ public class JokeActivity extends AppCompatActivity {
         layout = findViewById(R.id.activity_joke);
         text = (TextView) findViewById(R.id.jokeTextView);
         Intent intent = getIntent();
-        SQLiteOpenHelper jokeDatabaseHelper = new JokeDatabaseHelper(this);
+        JokeDatabaseHelper jokeDatabaseHelper = new JokeDatabaseHelper(this);
+        Cursor cursor = jokeDatabaseHelper.getJoke();
+        Log.e("Cursor", DatabaseUtils.dumpCursorToString(cursor));
+        //Cursor joke = jokeDatabaseHelper.getJoke(getString());
+        if(!cursor.isAfterLast()) {
+            cursor.moveToFirst();
+            Log.e("Cursor content",cursor.getString(cursor.getColumnIndex(JokeDatabaseHelper.JOKE_COL)));
+            view.setText(cursor.getString(cursor.getColumnIndex(JokeDatabaseHelper.JOKE_COL)));
+        }
+        created = intent.getStringExtra("created");
         urlCategory = intent.getStringExtra("button");
         url = "https://jokeapi.p.rapidapi.com/category/" + urlCategory;
         new FetchResults().execute(url);
@@ -68,7 +79,9 @@ public class JokeActivity extends AppCompatActivity {
         });
     }
 
+    public void readJoke(View view) {
 
+    }
 
     //this is for a new joke
     public void onClick (View v){
