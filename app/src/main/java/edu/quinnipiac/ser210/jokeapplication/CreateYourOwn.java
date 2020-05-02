@@ -1,11 +1,16 @@
 package edu.quinnipiac.ser210.jokeapplication;
 
-import androidx.annotation.ColorInt;
+/*
+@authors: Victoria Gorski, Jenna Saleh, and Julia Wilkinson
+@date: 5 - 2 - 20
+@description: The CreateYourOwn class allows the user to create their own joke and store it into the database.
+ */
+
+// Imports
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
-
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -14,8 +19,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,19 +26,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import static android.widget.Toast.LENGTH_LONG;
-
+// Start of class
 public class CreateYourOwn extends AppCompatActivity {
 
-    TextView view;
+    // Instance variables
     private Button submit;
     private Button viewJoke;
     public EditText joke;
-    private EditText punchline;
     private ShareActionProvider provider;
     public CoordinatorLayout layout;
     public TextView text, text1;
@@ -44,45 +44,46 @@ public class CreateYourOwn extends AppCompatActivity {
     private String[] allCols = {JokeDatabaseHelper.ID_COL, JokeDatabaseHelper.JOKE_COL};
 
 
+    // Methods
+    // Creates the class and connects it to its layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_your_own);
+        // Find each variable and connect it to its respective layout
         FloatingActionButton fab = findViewById(R.id.fab);
         layout = findViewById(R.id.activity_create_your_own);
-        text = (TextView) findViewById(R.id.createTextView);
-        text1 = (TextView) findViewById(R.id.instructionsTextView);
-        submit = (Button) findViewById(R.id.button2);
-        viewJoke = (Button) findViewById(R.id.button3);
-        joke = (EditText) findViewById(R.id.editText);
+        text = findViewById(R.id.createTextView);
+        text1 = findViewById(R.id.instructionsTextView);
+        submit = findViewById(R.id.submit);
+        viewJoke = findViewById(R.id.viewJoke);
+        joke = findViewById(R.id.userInput);
         CreatedJokes createdJokes = new CreatedJokes(joke.getText().toString());
         jokeDatabaseHelper = new JokeDatabaseHelper(this);
         jokeDatabaseHelper.insertJoke(createdJokes);
-        //punchline = (EditText) findViewById(R.id.editText2);
-
         database = jokeDatabaseHelper.getWritableDatabase();
+        // When the user clicks the submit button, submit the joke to the database
         submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Joke = joke.getText().toString();
-                addJoke(Joke);
-                joke.setText(Joke);
-
-
-            }
-        }
-        );
-
-        viewJoke.setOnClickListener(new View.OnClickListener() {
                                       @Override
                                       public void onClick(View v) {
-                                          Intent intent = new Intent(CreateYourOwn.this, JokeActivity.class);
-                                          intent.putExtra("created", String.valueOf(joke));
-                                          startActivity(intent);
+                                          String Joke = joke.getText().toString();
+                                          addJoke(Joke);
+                                          joke.setText(Joke);
                                       }
                                   }
         );
 
+        // When the user clicks the view joke button, bring the user to the JokeActivity screen
+        viewJoke.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(CreateYourOwn.this, JokeActivity.class);
+                                            intent.putExtra("created", String.valueOf(joke));
+                                            startActivity(intent);
+                                        }
+                                    }
+        );
+        // When the user clicks the back button, bring them to the CategoryActivity screen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,77 +91,57 @@ public class CreateYourOwn extends AppCompatActivity {
                 startActivity(new Intent(CreateYourOwn.this, CategoryActivity.class));
             }
         });
-
-
     }
 
-    public void open() throws SQLiteException {
-        database = jokeDatabaseHelper.getWritableDatabase();
-    }
-
-
-    public SQLiteDatabase getJokeFromDatabase() {
-        return database;
-}
-
-public void close() {
-        jokeDatabaseHelper.close();
-}
-
+    // Adds a joke to the database
     public CreatedJokes addJoke(String newJoke) {
-        Log.e(newJoke, "here is the joke");
         ContentValues jokes = new ContentValues();
+        // Put the user - created joke into the database
         jokes.put(JokeDatabaseHelper.JOKE_COL, newJoke);
         long insertId = database.insert(JokeDatabaseHelper.JOKE_TABLE, null, jokes);
+        // Allow the cursor to set the ID of the joke
         Cursor cursor = database.query(JokeDatabaseHelper.JOKE_TABLE, allCols, JokeDatabaseHelper.ID_COL + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         CreatedJokes createdJoke = cursorToJoke(cursor);
-
-      //  Log.e(createdJoke.toString(), "Joke is created");
         cursor.close();
         return createdJoke;
     }
 
+    // Sets the cursor to the desired joke
     private CreatedJokes cursorToJoke(Cursor cursor) {
-        Log.e("Cursor", "Use the cursor to find the joke");
         CreatedJokes createdJoke = new CreatedJokes("Display");
         createdJoke.setId(cursor.getLong(0));
         createdJoke.setJoke(cursor.getString(1));
         return createdJoke;
-
     }
 
-    public void insertJoke(View insertJoke) {
-
-    }
-
+    // Create the menu in the action bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getIntent();
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem shareItem = menu.findItem(R.id.action_share);
-        provider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareItem);
+        provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
         return true;
     }
+
+    // Assign each variable to its respective function
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch (id) {
+            // Settings function
             case R.id.action_settings:
                 Toast.makeText(this, "You can change my background and text color here!", Toast.LENGTH_SHORT);
                 return true;
+            // Share function
             case R.id.action_share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, "This is a message for you");
                 provider.setShareIntent(intent);
                 return true;
+            // Help function
             case R.id.action_help:
                 AlertDialog.Builder help = new AlertDialog.Builder(this);
                 help.setTitle("How to Use");
@@ -168,29 +149,31 @@ public void close() {
                 help.setCancelable(true);
                 help.show();
                 return true;
+            // Blue background option
             case R.id.blueBackground:
                 layout.setBackgroundColor(Color.parseColor("#2c2d7d"));
                 return true;
+            // Black background option
             case R.id.blackBackground:
                 layout.setBackgroundColor(Color.parseColor("#000000"));
                 return true;
+            // Green background option
             case R.id.greenBackground:
                 layout.setBackgroundColor(Color.parseColor("#4bb458"));
                 return true;
+            // Red text option
             case R.id.redText:
                 text.setTextColor(Color.parseColor("#ed1215"));
-                text1.setTextColor(Color.parseColor("#ed1215"));
                 return true;
+            // White text option
             case R.id.whiteText:
                 text.setTextColor(Color.parseColor("#ffffff"));
-                text1.setTextColor(Color.parseColor("#ffffff"));
                 return true;
+            // Purple text option
             case R.id.purpleText:
                 text.setTextColor(Color.parseColor("#a279e4"));
-                text1.setTextColor(Color.parseColor("#a279e4"));
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
