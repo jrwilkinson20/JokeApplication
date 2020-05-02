@@ -1,32 +1,38 @@
 package edu.quinnipiac.ser210.jokeapplication;
 
 /*
- * Authors: Julia Wilkinson, Victoria Gorski, Jenna Saleh
- * This is an app designed to allow a user to choose a random joke from a selected category,
- * or to create their own joke and save it to a database.
- * April 9, 2020
- * SER210
+@authors: Victoria Gorski, Jenna Saleh, and Julia Wilkinson
+@date: 5 - 2 - 20
+@description: The OpeningActivity class creates the opening screen of the app.
  */
+
+// Imports
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
+// Start of class
 public class OpeningActivity extends AppCompatActivity {
 
+    // Methods
+    // Creates the class and connects it to its layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opening);
+        // Set the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
     }
 
-
+    // When the user clicks on the begin button, bring them to the CategoryActivity screen
+    public void onBegin(View view) {
+        Intent intent = new Intent(OpeningActivity.this, CategoryActivity.class);
+        startActivity(intent);
+    }
+}
     public void onBegin(View view) {
         Intent intent = new Intent(OpeningActivity.this, CategoryActivity.class);
         startActivity(intent);
